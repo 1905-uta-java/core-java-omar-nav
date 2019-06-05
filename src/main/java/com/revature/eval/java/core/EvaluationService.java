@@ -530,14 +530,11 @@ public class EvaluationService {
 	        String ogtext = "";
 	        String ciphertext = string;
 	        ciphertext = ciphertext.toLowerCase().replaceAll("[\\s,.+]", "");
-	        for(char c : ciphertext.toCharArray())
-	        {
-	            if(Character.isLetter(c))
-	            {
+	        for(char c : ciphertext.toCharArray()) {
+	            if(Character.isLetter(c)) {
 	            	ogtext += (char) ('z' + ('a' - c));
 	            }
-	            else
-	            {
+	            else {
 	            	ogtext += c;
 	            }
 	        }
