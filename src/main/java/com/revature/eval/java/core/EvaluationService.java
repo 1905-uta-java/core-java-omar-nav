@@ -1,8 +1,12 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EvaluationService {
 
@@ -13,9 +17,18 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public String reverse(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String reverse(String string) {		
+		// convert into bytes array
+        byte [] OGStringBytesArray = string.getBytes(); 
+        
+        // instantiate another array for the reversed array
+        byte [] result =  new byte [OGStringBytesArray.length]; 
+   
+	    for (int i = 0; i<OGStringBytesArray.length; i++) 
+	    	result[i] =  OGStringBytesArray[OGStringBytesArray.length-i-1]; 
+	     String resultFinal = new String(result);
+//	     System.out.println(new String(resultFinal));
+		return resultFinal;
 	}
 
 	/**
@@ -27,17 +40,25 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String acronym = "";
+
+        acronym += phrase.toUpperCase().charAt(0);
+
+        for (int i = 1; i <= phrase.length() - 1; i++) {
+            if (phrase.charAt(i - 1) == ' ' || phrase.charAt(i - 1) == '-') {
+            	acronym += phrase.toUpperCase().charAt(i);
+            }
+        }
+//        System.out.println(acronym);
+
+        return acronym;
 	}
 
 	/**
-	 * 3. Determine if a triangle is equilateral, isosceles, or scalene. An
-	 * equilateral triangle has all three sides the same length. An isosceles
-	 * triangle has at least two sides the same length. (It is sometimes specified
-	 * as having exactly two sides the same length, but for the purposes of this
-	 * exercise we'll say at least two.) A scalene triangle has all sides of
-	 * different lengths.
+	 * 3. Determine if a triangle is equilateral, isosceles, or scalene. 
+	 * An equilateral triangle has all three sides the same length. 
+	 * An isosceles triangle has at least two sides the same length. 
+	 * A scalene triangle has all sides of different lengths.
 	 *
 	 */
 	static class Triangle {
@@ -81,18 +102,27 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if (sideOne == sideTwo && sideTwo == sideThree) {
+				return true;
+			} else {
 			return false;
+			}
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			if (sideOne == sideTwo || sideTwo == sideThree || sideOne == sideThree) {
+				return true;
+			} else {
 			return false;
+			}
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if (sideOne != sideTwo && sideTwo != sideThree && sideOne != sideThree) {
+				return true;
+			} else {
 			return false;
+			}
 		}
 
 	}
@@ -113,8 +143,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		char[] letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 
+				'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 
+				'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}; 
+		int[] values = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 
+				1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+		int score = 0;
+		string = string.toLowerCase();
+		for(int i = 0; i < string.length(); i++) {
+			  for(int j = 0; j < 26; j++) {
+			    if(string.charAt(i) == letters[j])
+			    {
+			      score += values[j];
+			    }
+			  }
+		}
+		return score;
 	}
 
 	/**
@@ -143,15 +187,30 @@ public class EvaluationService {
 	 * +1 (613)-995-0253 613-995-0253 1 613 995 0253 613.995.0253 should all produce
 	 * the output
 	 * 
-	 * 6139950253
+	 * 613 995 0253
 	 * 
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
-	}
+		string = string.replace(" ", "").replace(".", "").replace("-", "").replace("(", "").replace(")", "");
+		
+		if(string.length()>11){
+			throw new IllegalArgumentException("Number cannot be greateer than 11 digits");
+		} 
+		// look for way to search by all special characters
+		// not arriving to this else if with certain 
+		// regex [^0-9] or regex [^0-9] or [.)(^$*:+?@!-] for some reason
+		else if (string.contains("@")||string.contains("!")||string.contains("#")||
+				string.contains("$")||string.contains("@")||string.contains("*")||
+				string.contains(":")){
+			throw new IllegalArgumentException("Number cannot contain non numeric values");
+		} else  {
+			return string;
+			
+		}
+}
+
 
 	/**
 	 * 6. Given a phrase, count the occurrences of each word in that phrase.
@@ -163,8 +222,28 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		string = string.replaceAll("\n", "");
+		String wordArray[]= {};
+		
+		if (string.contains(",")) {
+			wordArray = string.split(",");			
+		} else {
+			wordArray = string.split(" ");			
+		}
+
+		Map<String, Integer> wordMap = new HashMap<String, Integer> ();
+		for (String s:wordArray) {
+			
+			if(!wordMap.containsKey(s)) {
+				wordMap.put(s, 1);
+			} else {
+				int count = wordMap.get(s);
+				wordMap.put(s, count +1);
+			}
+		}
+//		System.out.println(wordMap);
+		return wordMap;
 	}
 
 	/**
@@ -204,10 +283,25 @@ public class EvaluationService {
 	 */
 	static class BinarySearch<T> {
 		private List<T> sortedList;
-
+		
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int left = 0;
+			int right = sortedList.size() - 1;
+			int index = sortedList.size() - 1;
+
+			while (left <= right) {
+				int middle = (left + right) / 2;
+				if (t.equals(sortedList.get(middle))) {
+					index = sortedList.indexOf(t);
+					break;
+				}
+				if (sortedList.indexOf(t) < middle) {
+					right = middle - 1;
+				} else if (sortedList.indexOf(t) > middle) {
+					left = middle + 1;
+				}
+			}
+			return index;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -242,8 +336,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+        int n = String.valueOf(input).length(); 
+        int temporary = input;
+        int sum = 0; 
+        while (temporary != 0) { 
+            int r = temporary % 10; 
+            sum += Math.pow(r,n); 
+            temporary = temporary / 10; 
+        } 
+     
+        if (sum == input) {
+        	return true;
+        } else {
+        	return false;
+        }
+		
 	}
 
 	/**
@@ -260,8 +367,27 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		if(string == "") {
+			return false;
+		}
+
+		string = string.toUpperCase();
+		Set<String> letters = new HashSet<String>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", 
+				"I", "J", "K", "L", "M", "N", "O", "P", "Q", 
+				"R", "S", "T", "U", "V", "W", "X", "Y", "Z"));
+		string = string.replaceAll("\\s", "");
+		String[] wordsArray = string.split("");
+
+		for (int i = 0; i < wordsArray.length; i++) {
+			if(letters.contains(wordsArray[i])) {
+				letters.remove(wordsArray[i]);
+			}
+		}
+		if (letters.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	
@@ -300,8 +426,32 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			StringBuilder encryptedText = new StringBuilder();
+			String[] inputString = string.split("");
+			int shiftBy = 0;
+			for (int i = 0; i < inputString.length; i++) {
+				char inputLetter = inputString[i].charAt(0);
+				if ((int) inputLetter >= 65 && (int) inputLetter <= 90) {
+					shiftBy = inputLetter + key;
+					if (shiftBy > 90) {
+						shiftBy = shiftBy - 90;
+						encryptedText.append((char) ('A' + shiftBy - 1));
+					} else {
+						encryptedText.append((char) shiftBy);
+					}
+				} else if ((int) inputLetter >= 97 && (int) inputLetter <= 122) {
+					shiftBy = inputLetter + key;
+					if (shiftBy > 122) {
+						shiftBy = shiftBy - 122;
+						encryptedText.append((char) ('a' + shiftBy - 1));
+					} else {
+						encryptedText.append((char) shiftBy);
+					}
+				} else {
+					encryptedText.append(inputLetter);
+				}
+			}
+			return encryptedText.toString();
 		}
 
 	}
@@ -340,8 +490,34 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String ogtext = "";
+			String cleanedString = "";
+			String ciphertext = "";
+			// remove non alphabet characters
+			for(char c : string.toCharArray()) {
+				if(Character.isLetterOrDigit(c)) {
+					cleanedString += c;
+        		}
+    		}
+			
+    		cleanedString = cleanedString.toLowerCase();
+    		for(char c : cleanedString.toCharArray()) {
+    			if(Character.isLetter(c)) {
+    				ogtext += (char) ('a' + ('z' - c));
+        		} else {
+        			ogtext += c;
+        		}
+    		}
+    		
+            for(int i = 0; i < ogtext.length(); i += 5) {
+                if(i + 5 <= ogtext.length()) {
+                	ciphertext += (ogtext.substring(i, i + 5) + " ");
+                }
+                else {
+                	ciphertext += (ogtext.substring(i) + " ");
+                }
+            }
+    		return ciphertext.trim();
 		}
 
 		/**
@@ -351,8 +527,21 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+	        String ogtext = "";
+	        String ciphertext = string;
+	        ciphertext = ciphertext.toLowerCase().replaceAll("[\\s,.+]", "");
+	        for(char c : ciphertext.toCharArray())
+	        {
+	            if(Character.isLetter(c))
+	            {
+	            	ogtext += (char) ('z' + ('a' - c));
+	            }
+	            else
+	            {
+	            	ogtext += c;
+	            }
+	        }
+	        return ogtext;
 		}
 	}
 
@@ -388,6 +577,10 @@ public class EvaluationService {
 	 * 14. (Optional) Calculate the moment when someone has lived for 10^9 seconds.
 	 * 
 	 * A gigasecond is 109 (1,000,000,000) seconds.
+	 * 
+	 * 
+	 * given a time in temporal
+	 * return same time plus one giga Second
 	 * 
 	 * @param given
 	 * @return
@@ -426,7 +619,6 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
 		return 0;
 	}
 
